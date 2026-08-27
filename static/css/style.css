@@ -1,0 +1,161 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f6f8;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+section {
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+.informacion {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card {
+    flex: 1;
+    background: #f4f6f8;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
+.card p {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+select {
+    padding: 10px;
+    min-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    background: #222;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+.atributos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+    max-width: 500px;
+}
+
+.atributo {
+    padding: 12px;
+    background: #f4f6f8;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.atributo:hover {
+    background: #e8e8e8;
+}
+
+.atributo input {
+    margin-right: 10px;
+}
+
+.error {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #ffe0e0;
+    border-radius: 6px;
+}
+
+.tabla-container {
+    overflow-x: auto;
+}
+
+.tabla-dataset {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-dataset th,
+.tabla-dataset td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.tabla-dataset th {
+    background: #eee;
+}
+.parametros {
+    padding: 20px;
+    margin-top: 15px;
+    background: #f7f7f7;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.parametros h4 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.parametros input,
+.parametros select {
+    margin-top: 5px;
+}
+
+.ayuda {
+    font-size: 13px;
+    color: #666;
+}
+.grafica {
+    width: 100%;
+    overflow-x: auto;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.grafica img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: white;
+}

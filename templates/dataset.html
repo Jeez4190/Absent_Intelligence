@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Lab - Machine Learning</title>
+
+    <style>
+        /* ==================================================
+           GENERAL (WINDOWS XP STYLE)
+        ================================================== */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            /* Fuente clásica de Windows XP */
+            font-family: Tahoma, 'Trebuchet MS', Arial, sans-serif;
+            font-size: 13px;
+            /* Color de escritorio clásico de XP */
+            background: #004E98; 
+            color: #000;
+        }
+
+        /* ==================================================
+           CONTENEDOR PRINCIPAL
+        ================================================== */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        /* ==================================================
+           VENTANAS (REEMPLAZA CARDS Y HEADERS)
+        ================================================== */
+        .card, .header {
+            background: #ECE9D8; /* Color beige/gris clásico de las ventanas */
+            border: 3px solid #0054E3; /* Borde azul XP */
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Barras de título (Header H1 y Card H2) */
+        .header h1, .card h2 {
+            margin: 0;
+            padding: 4px 8px;
+            /* Gradiente de la barra de título de XP */
+            background: linear-gradient(to bottom, #0058e6 0%, #3a93ff 5%, #288eff 15%, #127dff 40%, #0369ff 76%, #005fe6 100%);
+            color: white;
+            font-family: 'Trebuchet MS', Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px #002b80;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #000;
+        }
+
+        /* Cuerpo de la ventana */
+        .window-body {
+            padding: 15px;
+        }
+
+        .header p {
+            margin: 0;
+            color: #000;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 14px;
+            border-bottom: 1px solid #ACA899;
+            padding-bottom: 3px;
+        }
+
+        /* ==================================================
+           FORMULARIOS (INPUTS, SELECTS, LABELS)
+        ================================================== */
+        label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 4px 6px;
+            /* Efecto hundido (inset) clásico de Win32 */
+            border: 2px inset #dfdfdf;
+            background: #FFF;
+            font-family: Tahoma, sans-serif;
+            font-size: 13px;
+        }
+
+        input[type="checkbox"] {
+            width: 13px;
+            height: 13px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* ==================================================
+           ATRIBUTOS
+        ================================================== */
+        .atributos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .atributo {
+            padding: 4px 8px;
+            background: #FFF;
+            border: 1px solid #ACA899;
+            border-radius: 2px;
+        }
+
+        .atributo label {
+            margin: 0;
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        /* ==================================================
+           PARAMETROS (GroupBox style)
+        ================================================== */
+        .parametros {
+            padding: 15px;
+            margin-top: 15px;
+            background: transparent;
+            border: 1px solid #ACA899;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .parametros h4 {
+            margin: 0;
+            position: absolute;
+            top: -9px;
+            left: 10px;
+            background: #ECE9D8;
+            padding: 0 5px;
+            font-size: 12px;
+            color: #0054E3;
+        }
+
+        .ayuda {
+            font-size: 11px;
+            color: #555;
+            margin-top: 4px;
+        }
+
+        /* ==================================================
+           BOTON
+        ================================================== */
+        .btn {
+            margin-top: 15px;
+            padding: 4px 20px;
+            border: 1px solid #003C74;
+            border-radius: 3px;
+            /* Gradiente de botón XP */
+            background: linear-gradient(to bottom, #f4f5f5, #dfdfdf);
+            box-shadow: inset 1px 1px 0px #fff;
+            color: black;
+            font-family: Tahoma, sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to bottom, #fff, #e6e6e6);
+            box-shadow: inset 1px 1px 0px #fff, 0 0 3px #0054E3;
+        }
+
+        .btn:active {
+            background: #d1d1d1;
+            box-shadow: inset 1px 1px 2px #999;
+        }
+
+        /* ==================================================
+           ALERTAS / ERRORES
+        ================================================== */
+        .error {
+            background: #ffcccc;
+            color: #cc0000;
+            border: 2px inset #ff6666;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .modelo-guardado {
+            margin-top: 20px;
+            padding: 10px;
+            background: #d5f2d5;
+            color: #006600;
+            border: 2px inset #8bc28b;
+        }
+
+        /* ==================================================
+           INFORMACION / GRIDS
+        ================================================== */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .info-item {
+            padding: 8px;
+            background: #FFF;
+            border: 1px solid #ACA899;
+        }
+
+        .info-item strong {
+            display: block;
+            margin-bottom: 2px;
+            color: #0054E3;
+        }
+
+        /* ==================================================
+           TABLA DE DATOS (Estilo ListView Win32)
+        ================================================== */
+        .tabla-container {
+            width: 100%;
+            overflow-x: auto;
+            border: 2px inset #ACA899;
+            background: #FFF;
+        }
+
+        .tabla-dataset {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tabla-dataset th, .tabla-dataset td {
+            border: 1px solid #ECE9D8;
+            padding: 4px 8px;
+            text-align: left;
+        }
+
+        .tabla-dataset th {
+            background: #EBEADB;
+            border-right: 1px solid #ACA899;
+            border-bottom: 1px solid #ACA899;
+            font-weight: normal;
+        }
+
+        /* ==================================================
+           RESULTADOS Y METRICAS
+        ================================================== */
+        .metricas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .metrica {
+            background: #FFF;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ACA899;
+        }
+
+        .metrica .valor {
+            font-size: 20px;
+            font-weight: bold;
+            color: #0054E3;
+            margin-top: 5px;
+        }
+
+        /* ==================================================
+           GRAFICAS Y REPORTES
+        ================================================== */
+        .grafica {
+            width: 100%;
+            overflow-x: auto;
+            text-align: center;
+            margin-top: 15px;
+            background: #FFF;
+            border: 2px inset #ACA899;
+            padding: 10px;
+        }
+
+        .grafica img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .reporte {
+            background: #FFF;
+            color: #000;
+            padding: 10px;
+            border: 2px inset #ACA899;
+            overflow-x: auto;
+            white-space: pre;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #ACA899;
+            border-bottom: 1px solid #FFF;
+            margin: 20px 0;
+        }
+
+        .campos-prueba {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .campos-prueba label {
+            margin-top: 0;
+        }
+
+        .campos-prueba input {
+            max-width: none;
+        }
+
+        .prediccion-box {
+            margin-top: 18px;
+            padding: 12px;
+            background: #d5e8ff;
+            border: 2px inset #7aa7d9;
+        }
+
+        .prediccion-clase {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0054E3;
+            margin: 8px 0 12px;
+        }
+
+        .lista-explicacion {
+            margin: 8px 0 0 18px;
+            padding: 0;
+        }
+
+        .lista-explicacion li {
+            margin-bottom: 6px;
+        }
+
+        .explicacion-experto {
+            background: #FFF;
+            border: 2px inset #ACA899;
+            padding: 12px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            margin: 10px 0 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ==================================================
+         HEADER
+    ================================================== -->
+    <div class="header">
+        <h1>AI Lab</h1>
+        <div class="window-body">
+            <p>Plataforma para entrenamiento y evaluación de algoritmos de Machine Learning.</p>
+        </div>
+    </div>
+
+    <!-- ==================================================
+         ERROR
+    ================================================== -->
+    {% if error %}
+        <div class="error">
+            <strong>❌ Error:</strong> {{ error }}
+        </div>
+    {% endif %}
+
+    <!-- ==================================================
+         CONFIGURACION
+    ================================================== -->
+    <form method="POST" action="/">
+
+        <!-- ==============================================
+             DATASET
+        =============================================== -->
+        <div class="card">
+            <h2>Dataset</h2>
+            <div class="window-body">
+                <label for="dataset">Selecciona un dataset:</label>
+                <!-- CAMBIO APLICADO: onchange añadido -->
+                <select name="dataset" id="dataset" required onchange="this.form.submit()">
+                    <option value="">-- Selecciona un dataset --</option>
+                    {% for dataset in datasets %}
+                        <option value="{{ dataset }}" {% if dataset == dataset_seleccionado %} selected {% endif %}>
+                            {{ dataset }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- ==============================================
+             ATRIBUTOS
+        =============================================== -->
+        {% if columnas %}
+        <div class="card">
+            <h2>Atributos</h2>
+            <div class="window-body">
+                <p>Selecciona las características que utilizará el algoritmo.</p>
+                <div class="atributos">
+                    {% for columna in columnas %}
+                        <div class="atributo">
+                            <label>
+                                <input type="checkbox" name="atributos" value="{{ columna }}" {% if columna in columnas_seleccionadas %} checked {% endif %}>
+                                {{ columna }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <label for="objetivo" style="margin-top: 15px;">🎯 Variable objetivo:</label>
+                <select name="objetivo" id="objetivo">
+                    <option value="">-- Selecciona la variable objetivo --</option>
+                    {% for columna in columnas %}
+                        <option value="{{ columna }}" {% if columna == columna_objetivo %} selected {% endif %}>
+                            {{ columna }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- ==============================================
+             ALGORITMO
+        =============================================== -->
+        <div class="card">
+            <h2>Algoritmo</h2>
+            <div class="window-body">
+                <label for="algoritmo">Selecciona el algoritmo:</label>
+                <select name="algoritmo" id="algoritmo">
+                    <option value="">-- Selecciona un algoritmo --</option>
+                    <option value="id3" {% if algoritmo == "id3" %} selected {% endif %}>🌳 ID3</option>
+                    <option value="knn" {% if algoritmo == "knn" %} selected {% endif %}>🔵 K-NN</option>
+                </select>
+
+                <!-- PARAMETROS ID3 -->
+                <div id="parametros-id3" class="parametros">
+                    <h4>ID3</h4>
+                    <p style="margin-top:10px;">Configuración del árbol de decisión.</p>
+                    <label for="max_depth">Profundidad máxima:</label>
+                    <input type="number" id="max_depth" name="max_depth" min="1" value="{{ request.form.get('max_depth', '') }}" placeholder="Sin límite">
+                    <p class="ayuda">Deja vacío para permitir cualquier profundidad.</p>
+                </div>
+
+                <!-- PARAMETROS KNN -->
+                <div id="parametros-knn" class="parametros">
+                    <h4>K-NN</h4>
+                    <p style="margin-top:10px;">Configuración del algoritmo de vecinos más cercanos.</p>
+                    
+                    <label for="n_neighbors">Número de vecinos (K):</label>
+                    <input type="number" id="n_neighbors" name="n_neighbors" min="1" value="{{ request.form.get('n_neighbors', '5') }}">
+                    
+                    <label for="weights">Pesos:</label>
+                    <select id="weights" name="weights">
+                        <option value="uniform" {% if request.form.get('weights', 'uniform') == 'uniform' %} selected {% endif %}>Uniform</option>
+                        <option value="distance" {% if request.form.get('weights') == 'distance' %} selected {% endif %}>Distance</option>
+                    </select>
+
+                    <label for="metric">Métrica:</label>
+                    <select id="metric" name="metric">
+                        <option value="minkowski" {% if request.form.get('metric', 'minkowski') == 'minkowski' %} selected {% endif %}>Minkowski</option>
+                        <option value="euclidean" {% if request.form.get('metric') == 'euclidean' %} selected {% endif %}>Euclidean</option>
+                        <option value="manhattan" {% if request.form.get('metric') == 'manhattan' %} selected {% endif %}>Manhattan</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==============================================
+             HOLD OUT
+        =============================================== -->
+        <div class="card">
+            <h2>Hold-Out</h2>
+            <div class="window-body">
+                <label for="holdout">Porcentaje para pruebas:</label>
+                <select name="holdout" id="holdout">
+                    <option value="0.10" {% if request.form.get('holdout', '0.30') == '0.10' %} selected {% endif %}>90% entrenamiento / 10% prueba</option>
+                    <option value="0.20" {% if request.form.get('holdout', '0.30') == '0.20' %} selected {% endif %}>80% entrenamiento / 20% prueba</option>
+                    <option value="0.30" {% if request.form.get('holdout', '0.30') == '0.30' %} selected {% endif %}>70% entrenamiento / 30% prueba</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ==============================================
+             BOTON
+        =============================================== -->
+        <div class="card" style="background: transparent; border: none; box-shadow: none;">
+            <!-- CAMBIO APLICADO: name="btn_entrenar" value="1" añadido -->
+            <button type="submit" name="btn_entrenar" value="1" class="btn">🚀 Entrenar modelo</button>
+        </div>
+
+    </form>
+
+    <!-- ==================================================
+         INFORMACION DATASET
+    ================================================== -->
+    {% if informacion %}
+    <div class="card">
+        <h2>Información del Dataset</h2>
+        <div class="window-body">
+            <div class="info-grid">
+                {% if informacion is mapping %}
+                    {% for clave, valor in informacion.items() %}
+                        <div class="info-item">
+                            <strong>{{ clave }}</strong>
+                            <span>{{ valor }}</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="info-item">
+                        {{ informacion }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ==================================================
+         PREVIEW
+    ================================================== -->
+    {% if preview %}
+    <div class="card">
+        <h2>👀 Vista previa</h2>
+        <div class="window-body">
+            <div class="tabla-container">
+                {{ preview | safe }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ==================================================
+         RESULTADOS
+    ================================================== -->
+    {% if resultados %}
+    <div class="card">
+        <h2>Resultados del entrenamiento</h2>
+        <div class="window-body">
+
+            <div class="metricas">
+                <div class="metrica">
+                    <strong>Accuracy</strong>
+                    <div class="valor">{{ "%.2f"|format(resultados.accuracy * 100) }}%</div>
+                </div>
+                <div class="metrica">
+                    <strong>Precision</strong>
+                    <div class="valor">{{ "%.2f"|format(resultados.precision * 100) }}%</div>
+                </div>
+                <div class="metrica">
+                    <strong>Recall</strong>
+                    <div class="valor">{{ "%.2f"|format(resultados.recall * 100) }}%</div>
+                </div>
+                <div class="metrica">
+                    <strong>F1-Score</strong>
+                    <div class="valor">{{ "%.2f"|format(resultados.f1 * 100) }}%</div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Algoritmo</strong>
+                    {{ resultados.algorithm }}
+                </div>
+                <div class="info-item">
+                    <strong>Datos de entrenamiento</strong>
+                    {{ resultados.train_size }}
+                </div>
+                <div class="info-item">
+                    <strong>Datos de prueba</strong>
+                    {{ resultados.test_size }}
+                </div>
+                <div class="info-item">
+                    <strong>Porcentaje de prueba</strong>
+                    {{ "%.0f"|format(resultados.test_percentage * 100) }}%
+                </div>
+            </div>
+
+            <h3 style="margin-top: 20px;">⚙️ Parámetros utilizados</h3>
+            <div class="info-grid">
+                {% for clave, valor in resultados.parameters.items() %}
+                    <div class="info-item">
+                        <strong>{{ clave }}</strong>
+                        {{ valor if valor != "" else "Sin límite" }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% if resultados.modelo %}
+            <div class="modelo-guardado">
+                <strong>Modelo guardado correctamente</strong><br><br>
+                Archivo: <strong>{{ resultados.modelo }}</strong>
+            </div>
+            {% endif %}
+
+            {% if resultados.confusion_image %}
+            <hr>
+            <h3>Matriz de Confusión</h3>
+            <div class="grafica">
+                <img src="{{ url_for('static', filename=resultados.confusion_image) }}" alt="Matriz de Confusión">
+            </div>
+            {% endif %}
+
+            {% if algoritmo == "id3" %}
+                {% if resultados.tree_image %}
+                <hr>
+                <h3>🌳 Árbol de Decisión ID3</h3>
+                <div class="grafica">
+                    <img src="{{ url_for('static', filename=resultados.tree_image) }}" alt="Árbol de Decisión ID3">
+                </div>
+                {% endif %}
+            {% endif %}
+            
+            {% if algoritmo == "knn" %}
+                {% if resultados.knn_image %}
+                <hr>
+                <h3>Visualización K-NN</h3>
+                <p>La gráfica muestra los datos seleccionados, el nuevo ejemplo y sus vecinos más cercanos.</p>
+                <div class="grafica">
+                    <img src="{{ url_for('static', filename=resultados.knn_image) }}" alt="Visualización K-NN">
+                </div>
+                {% endif %}
+            {% endif %}
+
+            {% if resultados.classification_report %}
+            <hr>
+            <h3>📄 Classification Report</h3>
+            <div class="reporte">{{ resultados.classification_report }}</div>
+            {% endif %}
+
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ==================================================
+         PROBAR MODELO
+    ================================================== -->
+    {% if nombre_modelo and columnas_seleccionadas %}
+    <form method="POST" action="/" id="form-probar">
+        <input type="hidden" name="dataset" value="{{ dataset_seleccionado }}">
+        <input type="hidden" name="objetivo" value="{{ columna_objetivo }}">
+        <input type="hidden" name="algoritmo" value="{{ algoritmo }}">
+        <input type="hidden" name="nombre_modelo" value="{{ nombre_modelo }}">
+        <input type="hidden" name="holdout" value="{{ request.form.get('holdout', '0.30') }}">
+        <input type="hidden" name="max_depth" value="{{ request.form.get('max_depth', '') }}">
+        <input type="hidden" name="n_neighbors" value="{{ request.form.get('n_neighbors', '5') }}">
+        <input type="hidden" name="weights" value="{{ request.form.get('weights', 'uniform') }}">
+        <input type="hidden" name="metric" value="{{ request.form.get('metric', 'minkowski') }}">
+        {% for columna in columnas_seleccionadas %}
+            <input type="hidden" name="atributos" value="{{ columna }}">
+        {% endfor %}
+
+        <div class="card">
+            <h2>Probar modelo entrenado</h2>
+            <div class="window-body">
+                <p>
+                    Ingresa las medidas de una planta. El modelo
+                    <strong>{{ nombre_modelo }}</strong>
+                    indicará a qué especie pertenece y por qué.
+                </p>
+
+                <div class="campos-prueba">
+                    {% for columna in columnas_seleccionadas %}
+                        <div>
+                            <label for="prueba_{{ columna }}">{{ columna }}</label>
+                            <input
+                                type="text"
+                                id="prueba_{{ columna }}"
+                                name="prueba_{{ columna }}"
+                                value="{{ valores_prueba.get(columna, '') }}"
+                                required
+                            >
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" name="btn_predecir" value="1" class="btn">
+                    Clasificar planta
+                </button>
+
+                {% if prediccion %}
+                <div class="prediccion-box">
+                    <strong>Planta predicha</strong>
+                    <div class="prediccion-clase">{{ prediccion.prediccion }}</div>
+
+                    <h3>Explicación del experto</h3>
+                    {% if prediccion.explicacion_gemini %}
+                    <div class="explicacion-experto">{{ prediccion.explicacion_gemini }}</div>
+                    {% elif prediccion.error_gemini %}
+                    
+                    <p>{{ prediccion.resumen }}</p>
+                    {% if prediccion.descripcion_planta %}
+                    <p>{{ prediccion.descripcion_planta }}</p>
+                    {% endif %}
+                    {% endif %}
+
+                    {% if prediccion.probabilidades %}
+                    <h3>Confianza por clase</h3>
+                    <div class="info-grid">
+                        {% for item in prediccion.probabilidades %}
+                            <div class="info-item">
+                                <strong>{{ item.clase }}</strong>
+                                <span>{{ "%.1f"|format(item.probabilidad * 100) }}%</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if prediccion.razones %}
+                    <h3>Por qué pertenece a {{ prediccion.prediccion }}</h3>
+                    <ul class="lista-explicacion">
+                        {% for razon in prediccion.razones %}
+                            <li>{{ razon }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    {% if prediccion.pasos_modelo %}
+                    <h3>Camino en el árbol ID3</h3>
+                    <ul class="lista-explicacion">
+                        {% for paso in prediccion.pasos_modelo %}
+                            <li>{{ paso }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    {% if prediccion.vecinos %}
+                    <h3>Vecinos más cercanos (K-NN)</h3>
+                    <p>La clase se decide por los ejemplos de entrenamiento más parecidos a tus datos:</p>
+                    <div class="tabla-container">
+                        <table class="tabla-dataset">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Clase</th>
+                                    <th>Distancia</th>
+                                    {% for columna in columnas_seleccionadas %}
+                                        <th>{{ columna }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vecino in prediccion.vecinos %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ vecino.clase }}</td>
+                                    <td>{{ "%.3f"|format(vecino.distancia) }}</td>
+                                    {% for columna in columnas_seleccionadas %}
+                                        <td>{{ vecino.valores[columna] }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+    {% endif %}
+
+</div>
+
+<!-- ======================================================
+     JAVASCRIPT
+====================================================== -->
+<script>
+    const algoritmoSelect = document.getElementById("algoritmo");
+    const parametrosID3 = document.getElementById("parametros-id3");
+    const parametrosKNN = document.getElementById("parametros-knn");
+
+    function actualizarParametros() {
+        const algoritmo = algoritmoSelect.value;
+        parametrosID3.style.display = "none";
+        parametrosKNN.style.display = "none";
+
+        if (algoritmo === "id3") {
+            parametrosID3.style.display = "block";
+        }
+        if (algoritmo === "knn") {
+            parametrosKNN.style.display = "block";
+        }
+    }
+
+    algoritmoSelect.addEventListener("change", actualizarParametros);
+    actualizarParametros();
+</script>
+
+</body>
+</html>

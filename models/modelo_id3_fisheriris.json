@@ -1,0 +1,15 @@
+{
+  "modelo": "modelo_id3_fisheriris.joblib",
+  "algoritmo": "id3",
+  "dataset": "fisheriris.csv",
+  "atributos": [
+    "sepal length (cm)",
+    "sepal width (cm)",
+    "petal length (cm)",
+    "petal width (cm)"
+  ],
+  "objetivo": "species",
+  "parametros": {
+    "max_depth": "6"
+  }
+}
